@@ -1,10 +1,23 @@
 version: '3.8'
 
 services:
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    image: nginx
+    container_name: "nginx_cont"
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      - server
+    networks:
+      - meet-chat-app
   client:
     build: ./client
     ports:
-      - "3000:5173" # Browser -> container:5173
+      - "3001:5173" # Changed to 3001 to avoid conflict
     volumes:
       - ./client:/app
       - /app/node_modules
@@ -12,6 +25,8 @@ services:
       - VITE_API_URL=http://server:5000
     depends_on:
       - server
+    networks:
+      - meet-chat-app
 
   server:
     build: ./server
@@ -21,3 +36,8 @@ services:
     volumes:
       - ./server:/app
       - /app/node_modules
+    networks:
+      - meet-chat-app
+
+networks:
+  meet-chat-app:
