@@ -4,7 +4,7 @@ services:
   client:
     build: ./client
     ports:
-      - "5173:5173"
+      - "3000:5173" # Browser -> container:5173
     volumes:
       - ./client:/app
       - /app/node_modules
